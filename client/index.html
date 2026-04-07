@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechHub - Premium Electronics Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="logo" onclick="navigateTo('home')" style="cursor: pointer;">
+        <span class="logo-icon">⚡</span>
+        <span>TechHub</span>
+      </div>
+      
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
+        <button class="search-btn">🔍</button>
+      </div>
+
+      <div class="nav-links">
+        <button class="nav-btn" onclick="navigateTo('shop')">🛍️ Shop</button>
+        <button class="nav-btn" onclick="navigateTo('orders')">📦 Orders</button>
+        <button class="nav-btn" onclick="navigateTo('wishlist')">❤️ Wishlist</button>
+        <button class="nav-btn" onclick="navigateTo('profile')">👤 Profile</button>
+        <button class="btn-secondary" onclick="showCart()" style="position: relative;">
+          🛒 Cart
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HOME PAGE -->
+  <div id="homePage" class="page active">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to TechHub</h1>
+        <p>Discover the Latest in Premium Electronics & Gadgets</p>
+        <button class="btn-primary" onclick="navigateTo('shop')">Explore Products 🎯</button>
+      </div>
+      <div class="hero-background"></div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="featured-categories">
+      <div class="container">
+        <h2>Shop by Category</h2>
+        <div class="categories-grid">
+          <div class="category-card" onclick="navigateToCategory('Electronics')">
+            <div class="category-icon">🖥️</div>
+            <h3>Electronics</h3>
+            <p>Trending devices</p>
+          </div>
+          <div class="category-card" onclick="navigateToCategory('Laptops')">
+            <div class="category-icon">💻</div>
+            <h3>Laptops</h3>
+            <p>Powerful machines</p>
+          </div>
+          <div class="category-card" onclick="navigateToCategory('Phones')">
+            <div class="category-icon">📱</div>
+            <h3>Phones</h3>
+            <p>Latest smartphones</p>
+          </div>
+          <div class="category-card" onclick="navigateToCategory('Accessories')">
+            <div class="category-icon">🎧</div>
+            <h3>Accessories</h3>
+            <p>Enhance your setup</p>
+          </div>
+          <div class="category-card" onclick="navigateToCategory('Gadgets')">
+            <div class="category-icon">⌚</div>
+            <h3>Gadgets</h3>
+            <p>Smart technology</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+      <div class="container">
+        <h2>Featured Products</h2>
+        <div class="products-grid" id="featuredGrid"></div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stat-card">
+          <h3>5000+</h3>
+          <p>Happy Customers</p>
+        </div>
+        <div class="stat-card">
+          <h3>10000+</h3>
+          <p>Products</p>
+        </div>
+        <div class="stat-card">
+          <h3>24/7</h3>
+          <p>Support</p>
+        </div>
+        <div class="stat-card">
+          <h3>100%</h3>
+          <p>Authentic</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- SHOP PAGE -->
+  <div id="shopPage" class="page">
+    <section class="products-section">
+      <div class="container">
+        <div class="shop-header">
+          <h1>All Products</h1>
+          <p id="productCount">0 products found</p>
+        </div>
+
+        <!-- Filters & Sorting -->
+        <div class="shop-controls">
+          <div class="filters">
+            <h3>Categories</h3>
+            <div class="category-filters">
+              <button class="filter-btn active" onclick="filterByCategory('all')">All Products</button>
+              <button class="filter-btn" onclick="filterByCategory('Electronics')">📺 Electronics</button>
+              <button class="filter-btn" onclick="filterByCategory('Laptops')">💻 Laptops</button>
+              <button class="filter-btn" onclick="filterByCategory('Phones')">📱 Phones</button>
+              <button class="filter-btn" onclick="filterByCategory('Accessories')">🎧 Accessories</button>
+              <button class="filter-btn" onclick="filterByCategory('Gadgets')">⌚ Gadgets</button>
+            </div>
+
+            <h3>Price Range</h3>
+            <div class="price-filter">
+              <input type="range" id="priceRange" min="0" max="2000" value="2000" onchange="filterByPrice(this.value)">
+              <span id="priceDisplay">Under $2000</span>
+            </div>
+
+            <h3>Sort By</h3>
+            <select id="sortSelect" onchange="sortProducts(this.value)" class="sort-dropdown">
+              <option value="newest">Newest</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+              <option value="trending">Trending</option>
+            </select>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="products-main">
+            <div class="products-grid" id="productsGrid"></div>
+            <div class="loading" id="loading" style="text-align: center; padding: 40px; display: none;">
+              <div class="spinner"></div>
+              <p>Loading products...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ORDERS PAGE -->
+  <div id="ordersPage" class="page">
+    <section class="orders-section">
+      <div class="container">
+        <h1>My Orders</h1>
+        <div id="ordersContainer" class="orders-grid">
+          <div class="empty-state">
+            <p>📦 No orders yet</p>
+            <button class="btn-primary" onclick="navigateTo('shop')">Start Shopping</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- WISHLIST PAGE -->
+  <div id="wishlistPage" class="page">
+    <section class="wishlist-section">
+      <div class="container">
+        <h1>My Wishlist</h1>
+        <div id="wishlistContainer" class="products-grid">
+          <div class="empty-state">
+            <p>❤️ Your wishlist is empty</p>
+            <button class="btn-primary" onclick="navigateTo('shop')">Browse Products</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div id="profilePage" class="page">
+    <section class="profile-section">
+      <div class="container">
+        <h1>My Account</h1>
+        <div id="profileContent" class="profile-grid">
+          <!-- Profile info loaded by JS -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="productModal" class="modal">
+    <div class="modal-content modal-lg">
+      <span class="modal-close" onclick="closeModal('productModal')">&times;</span>
+      <div class="product-detail">
+        <div class="product-detail-image">
+          <div id="detailImage" class="detail-image"></div>
+        </div>
+        <div class="product-detail-info">
+          <h2 id="detailName"></h2>
+          <div class="detail-rating">
+            <span id="detailRating"></span>
+            <span id="detailReviewCount"></span>
+          </div>
+          <div class="detail-price">
+            <span class="original-price" id="detailOriginalPrice"></span>
+            <span class="current-price" id="detailPrice"></span>
+            <span class="discount-tag" id="detailDiscount"></span>
+          </div>
+          <p id="detailDescription" class="detail-description"></p>
+          
+          <div class="product-specs">
+            <h4>Specifications</h4>
+            <div id="detailSpecs"></div>
+          </div>
+
+          <div class="detail-actions">
+            <div class="quantity-selector">
+              <button onclick="decreaseQty()">-</button>
+              <input type="number" id="qtyInput" value="1" min="1">
+              <button onclick="increaseQty()">+</button>
+            </div>
+            <button class="btn-primary btn-large" onclick="addToCartDetail()">Add to Cart</button>
+            <button class="btn-secondary btn-large" onclick="toggleWishlistDetail()">❤️ Wishlist</button>
+          </div>
+
+          <div class="product-stock" id="detailStock"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART MODAL -->
+  <div id="cartModal" class="modal">
+    <div class="modal-content modal-lg">
+      <span class="modal-close" onclick="closeModal('cartModal')">&times;</span>
+      <h2>Shopping Cart</h2>
+      <div id="cartItems" class="cart-items">
+        <!-- Cart items loaded by JS -->
+      </div>
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Discount:</span>
+          <span id="discountAmount">-$0.00</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span id="cartTotal">$0.00</span>
+        </div>
+      </div>
+      <button class="btn-primary btn-large" onclick="openCheckout()">Proceed to Checkout</button>
+      <button class="btn-secondary" onclick="closeModal('cartModal')">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkoutModal" class="modal">
+    <div class="modal-content modal-lg">
+      <span class="modal-close" onclick="closeModal('checkoutModal')">&times;</span>
+      <h2>Checkout</h2>
+      <form class="checkout-form" onsubmit="submitOrder(event)">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="fullName" required>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" id="phone" required>
+        </div>
+        <div class="form-group">
+          <label>Address *</label>
+          <input type="text" id="address" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" id="city" required>
+          </div>
+          <div class="form-group">
+            <label>State *</label>
+            <input type="text" id="state" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ZIP Code *</label>
+            <input type="text" id="zip" required>
+          </div>
+          <div class="form-group">
+            <label>Country *</label>
+            <input type="text" id="country" required>
+          </div>
+        </div>
+
+        <h3>Payment Method</h3>
+        <div class="payment-methods">
+          <label class="payment-option">
+            <input type="radio" name="payment" value="cod" checked>
+            <span>Cash on Delivery</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="card">
+            <span>Credit/Debit Card</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="upi">
+            <span>UPI</span>
+          </label>
+        </div>
+
+        <div class="checkout-summary">
+          <div>Total: <strong id="checkoutTotal">$0.00</strong></div>
+        </div>
+
+        <button type="submit" class="btn-primary btn-large">Place Order</button>
+        <button type="button" class="btn-secondary" onclick="closeModal('checkoutModal')">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- AUTH MODAL -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('authModal')">&times;</span>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+        <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required>
+        </div>
+        <button type="submit" class="btn-primary btn-full">Login</button>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="signupName" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signupEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" required>
+        </div>
+        <button type="submit" class="btn-primary btn-full">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="successModal" class="modal">
+    <div class="modal-content modal-sm">
+      <div class="success-icon">✅</div>
+      <h2 id="successTitle">Order Placed!</h2>
+      <p id="successMessage">Your order has been confirmed successfully</p>
+      <div id="successDetails"></div>
+      <button class="btn-primary btn-large" onclick="successAction()">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
